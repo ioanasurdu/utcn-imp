@@ -48,6 +48,12 @@ private:
   std::shared_ptr<Expr> ParseCallExpr();
   /// Parse an add/sub expression.
   std::shared_ptr<Expr> ParseAddSubExpr();
+  /// Parse a mul/div expression.
+  std::shared_ptr<Expr> ParseMulDivExpr();
+  /// Parse a mod expression.
+  std::shared_ptr<Expr> ParseModExpr();
+  /// Parse an eq expression.
+  std::shared_ptr<Expr> ParseEqExpr();
 
   /// Helper to get the current token.
   inline const Token &Current() { return lexer_.GetToken(); }

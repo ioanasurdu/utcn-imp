@@ -26,6 +26,11 @@ void Interp::Run()
         Push(*(stack_.rbegin() + idx));
         continue;
       }
+      case Opcode::PUSH_INT: {
+        auto idx = prog_.Read<int64_t>(pc_);
+        Push(idx);
+        continue;
+      }
       case Opcode::POP: {
         Pop();
         continue;
@@ -52,6 +57,36 @@ void Interp::Run()
         auto rhs = PopInt();
         auto lhs = PopInt();
         Push(lhs + rhs);
+        continue;
+      }
+      case Opcode::SUB: {
+        auto rhs = PopInt();
+        auto lhs = PopInt();
+        Push(lhs - rhs);
+        continue;
+      }
+      case Opcode::MUL: {
+        auto rhs = PopInt();
+        auto lhs = PopInt();
+        Push(lhs * rhs);
+        continue;
+      }
+      case Opcode::DIV: {
+        auto rhs = PopInt();
+        auto lhs = PopInt();
+        Push(lhs / rhs);
+        continue;
+      }
+      case Opcode::EQ: {
+        auto rhs = PopInt();
+        auto lhs = PopInt();
+        Push(uint64_t (rhs == lhs));
+        continue;
+      }
+      case Opcode::MOD: {
+        auto rhs = PopInt();
+        auto lhs = PopInt();
+        Push(lhs % rhs);
         continue;
       }
       case Opcode::RET: {

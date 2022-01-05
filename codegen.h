@@ -127,6 +127,8 @@ private:
   void LowerBinaryExpr(const Scope &scope, const BinaryExpr &expr);
   /// Lowers a call expression.
   void LowerCallExpr(const Scope &scope, const CallExpr &expr);
+  /// Lowers an integer expression.
+  void LowerIntExpr(const IntExpr &expr);
 
   /// Lowers a function declaration.
   void LowerFuncDecl(const Scope &scope, const FuncDecl &funcDecl);
@@ -145,10 +147,22 @@ private:
   void EmitPushProto(RuntimeFn fn);
   /// Push the nth value from the stack to the top.
   void EmitPeek(uint32_t index);
+  /// Push an integer value to the stack.
+  void EmitPushInt(uint64_t index);
   /// Emit a return instruction.
   void EmitReturn();
   /// Emit an add opcode.
   void EmitAdd();
+  /// Emit a sub opcode.
+  void EmitSub();
+  /// Emit a mul opcode.
+  void EmitMul();
+  /// Emit a div opcode.
+  void EmitDiv();
+  /// Emit an eq opcode.
+  void EmitEq();
+  /// Emit a mod opcode.
+  void EmitMod();
   /// Emit a label.
   void EmitLabel(Label label);
   /// Emit a conditional jump.

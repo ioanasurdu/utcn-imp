@@ -47,6 +47,11 @@ public:
     EQUAL,
     COMMA,
     PLUS,
+    MINUS,
+    EQ,
+    MUL,
+    DIV,
+    MOD,
     // Complex tokens.
     INT,
     STRING,
@@ -87,6 +92,13 @@ public:
     return *value_.StringValue;
   }
 
+  /// Return the integer value.
+  std::uint64_t GetDigit() const
+  {
+    assert(Is(Kind::INT) && "not an identifier");
+    return value_.IntValue;
+  }
+
   /// Copy operator.
   Token &operator=(const Token &that);
 
@@ -100,10 +112,16 @@ public:
   static Token Semi(const Location &l) { return Token(l, Kind::SEMI); }
   static Token Equal(const Location &l) { return Token(l, Kind::EQUAL); }
   static Token Plus(const Location &l) { return Token(l, Kind::PLUS); }
+  static Token Minus(const Location &l) { return Token(l, Kind::MINUS); }
+  static Token Eq(const Location &l) { return Token(l, Kind::EQ); }
+  static Token Mul(const Location &l) { return Token(l, Kind::MUL); }
+  static Token Div(const Location &l) { return Token(l, Kind::DIV); }
+  static Token Mod(const Location &l) { return Token(l, Kind::MOD); }
   static Token Comma(const Location &l) { return Token(l, Kind::COMMA); }
   static Token Func(const Location &l) { return Token(l, Kind::FUNC); }
   static Token Return(const Location &l) { return Token(l, Kind::RETURN); }
   static Token While(const Location &l) { return Token(l, Kind::WHILE); }
+  static Token Int(const Location &l, const std::uint64_t &str);
   static Token Ident(const Location &l, const std::string &str);
   static Token String(const Location &l, const std::string &str);
 

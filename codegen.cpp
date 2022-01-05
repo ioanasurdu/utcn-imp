@@ -177,6 +177,9 @@ void Codegen::LowerExpr(const Scope &scope, const Expr &expr)
     case Expr::Kind::CALL: {
       return LowerCallExpr(scope, static_cast<const CallExpr &>(expr));
     }
+    case Expr::Kind::INT: {
+      return LowerIntExpr(static_cast<const IntExpr &>(expr));
+    }
   }
 }
 
@@ -209,6 +212,21 @@ void Codegen::LowerBinaryExpr(const Scope &scope, const BinaryExpr &binary)
     case BinaryExpr::Kind::ADD: {
       return EmitAdd();
     }
+    case BinaryExpr::Kind::SUB: {
+      return EmitSub();
+    }
+    case BinaryExpr::Kind::MUL: {
+      return EmitMul();
+    }
+    case BinaryExpr::Kind::DIV: {
+      return EmitDiv();
+    }
+    case BinaryExpr::Kind::EQ: {
+      return EmitEq();
+    }
+    case BinaryExpr::Kind::MOD: {
+      return EmitMod();
+    }
   }
 }
 
@@ -221,6 +239,13 @@ void Codegen::LowerCallExpr(const Scope &scope, const CallExpr &call)
   LowerExpr(scope, call.GetCallee());
   EmitCall(call.arg_size());
   depth_ -= call.arg_size();
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::LowerIntExpr(const IntExpr &expr)
+{
+  auto it = expr.GetDigit();
+  return EmitPushInt(it);
 }
 
 // -----------------------------------------------------------------------------
@@ -323,6 +348,14 @@ void Codegen::EmitPeek(uint32_t index)
 }
 
 // -----------------------------------------------------------------------------
+void Codegen::EmitPushInt(uint64_t index)
+{
+  depth_ += 1;
+  Emit<Opcode>(Opcode::PUSH_INT);
+  Emit<int64_t>(index);
+}
+
+// -----------------------------------------------------------------------------
 void Codegen::EmitReturn()
 {
   assert(depth_ > 0 && "no elements on stack");
@@ -338,6 +371,46 @@ void Codegen::EmitAdd()
   assert(depth_ > 0 && "no elements on stack");
   depth_ -= 1;
   Emit<Opcode>(Opcode::ADD);
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::EmitSub()
+{
+  assert(depth_ > 0 && "no elements on stack");
+  depth_ -= 1;
+  Emit<Opcode>(Opcode::SUB);
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::EmitMul()
+{
+  assert(depth_ > 0 && "no elements on stack");
+  depth_ -= 1;
+  Emit<Opcode>(Opcode::MUL);
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::EmitDiv()
+{
+  assert(depth_ > 0 && "no elements on stack");
+  depth_ -= 1;
+  Emit<Opcode>(Opcode::DIV);
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::EmitEq()
+{
+  assert(depth_ > 0 && "no elements on stack");
+  depth_ -= 1;
+  Emit<Opcode>(Opcode::EQ);
+}
+
+// -----------------------------------------------------------------------------
+void Codegen::EmitMod()
+{
+  assert(depth_ > 0 && "no elements on stack");
+  depth_ -= 1;
+  Emit<Opcode>(Opcode::MOD);
 }
 
 // -----------------------------------------------------------------------------
